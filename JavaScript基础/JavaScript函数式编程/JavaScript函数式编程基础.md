@@ -25,3 +25,50 @@
 http://www.cnblogs.com/liuyanlong/archive/2013/05/27/3102161.html
 
 在这里暂不深入了解。
+
+### 柯里化
+
+柯里化操作即是，接受一个函数，返回一个只接受一个参数的汉化，有点类似于拆分函数。
+
+方向性有区别，以按照参数从右到左柯里化为例。
+``` javascript
+function curry2(fun){
+  return function(secondArg){
+    return function(firstArg){
+      return fun(firstArg,secondArg);
+    }
+  }
+}
+
+```
+
+以上代码接受了一个函数，把它按照函数从右到左区分开了。实际调用的时候本来是f(1,2) 然后化为curry_f(2)(1),柯里化之后先接受最后的参数，每次返回一个只接受一个参数的函数。
+
+柯里化有利于组合现有的函数，帮助配置并搭建出丰富的函数。
+并且柯里化有助于创建更流利的API接口。
+
+### 纯函数
+**纯函数**是指 不依赖于且不改变它作用域之外的变量状态 的函数。也就是说， *纯函数的返回值只由它调用时的参数决定 ，它的执行不依赖于系统的状态（比如：何时、何处调用它*
+
+像random函数，date函数，都不是纯函数。
+
+
+在函数式编程中，我们讨厌这种会改变数据的笨函数。我们追求的是那种可靠的，每次都能返回同样结果的函数。
+
+如果函数依赖于全局变量等外部环境，那么这个函数则是不纯的。
+
+``` javascript
+// 不纯的
+var minimum = 21;
+
+var checkAge = function(age) {
+  return age >= minimum;
+};
+
+
+// 纯的
+var checkAge = function(age) {
+  var minimum = 21;
+  return age >= minimum;
+};
+```
