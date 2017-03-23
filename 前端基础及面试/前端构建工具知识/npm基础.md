@@ -1,5 +1,10 @@
 ## npm使用及理论基础
 
+### --save
+npm install --save会把包安装并且条目写入package.json.
+
+同理还有--save-dev
+
 ### npm run XXX 配置
 npm run XXX是执行配置在package.json中的脚本，比如：
 
