@@ -67,3 +67,66 @@ g.throw('出错了');
 ```
 
 上面代码的最后一行，Generator函数体外，使用指针对象的throw方法抛出的错误，可以被函数体内的try ...catch代码块捕获。这意味着，出错的代码与处理错误的代码，实现了时间和空间上的分离，这对于异步编程无疑是很重要的。
+
+### generator函数的this
+Generator函数总是返回一个遍历器，ES6规定这个遍历器是Generator函数的实例，也继承了Generator函数的prototype对象上的方法。
+
+``` javascript
+function* g() {}
+
+g.prototype.hello = function () {
+  return 'hi!';
+};
+
+let obj = g();
+
+obj instanceof g // true
+obj.hello() // 'hi!'
+```
+
+那么，有没有办法让Generator函数返回一个正常的对象实例，既可以用next方法，又可以获得正常的this？
+
+
+
+``` javascript
+function* F() {
+  this.a = 1;
+  yield this.b = 2;
+  yield this.c = 3;
+}
+var f = F.call(F.prototype);
+
+f.next();  // Object {value: 2, done: false}
+f.next();  // Object {value: 3, done: false}
+f.next();  // Object {value: undefined, done: true}
+
+f.a // 1
+f.b // 2
+f.c // 3
+```
+
+
+直接上接近终版的方案，首先，我们知道迭代器是这个函数的实例，且继承了prototype。所以我们就可以直接拿这个函数的prototype(应该是新建了一个)来进行call调用，期间generator函数里的this会直接操作在这个这个新建的F.prototype上，返回的迭代器为f，继承了prototyoe里的东西和this的操作。
+
+最后封装的版本可以为：
+``` javascript
+function* gen() {
+  this.a = 1;
+  yield this.b = 2;
+  yield this.c = 3;
+}
+
+function F() {
+  return gen.call(gen.prototype);
+}
+
+var f = new F();
+
+f.next();  // Object {value: 2, done: false}
+f.next();  // Object {value: 3, done: false}
+f.next();  // Object {value: undefined, done: true}
+
+f.a // 1
+f.b // 2
+f.c // 3
+```
