@@ -52,3 +52,100 @@ timeout(100).then((value) => {
 上面代码中，timeout方法返回一个Promise实例，表示一段时间以后才会发生的结果。过了指定的时间（ms参数）以后，Promise实例的状态变为Resolved，就会触发then方法绑定的回调函数。
 
 Promise新建后就会立即执行。
+
+### .catch和
+要注意
+
+Promise.prototype.catch()
+
+*It behaves the same as calling Promise.prototype.then(undefined, onRejected).*
+
+这里说，catch()是then()的语法糖。
+
+意思就是在promise后面接.catch(fn),就是相当于接了一个then(undefined,fn)
+
+跟传统的try/catch代码块不同的是，如果没有使用catch方法指定错误处理的回调函数，Promise对象抛出的错误不会传递到外层代码，即不会有任何反应。
+
+### .then
+万分注意，.then返回的，依旧是一个promise。
+
+采用链式的then，可以指定一组按照次序调用的回调函数。这时，前一个回调函数，有可能返回的还是一个Promise对象（即有异步操作），这时后一个回调函数，就会等待该Promise对象的状态发生变化，才会被调用。
+
+``` javascript
+getJSON("/post/1.json").then(function(post) {
+  return getJSON(post.commentURL);
+}).then(function funcA(comments) {
+  console.log("Resolved: ", comments);
+}, function funcB(err){
+  console.log("Rejected: ", err);
+});
+```
+
+### Promise.resolve方法
+promise.resolve方法用来包装一个新的promise对象，参数比较多样，需要注意，具体参阅手册。
+
+Promise.resolve等价于下面的写法。
+```
+Promise.resolve('foo')
+// 等价于
+new Promise(resolve => resolve('foo'))
+```
+
+返回一个promise对象，并且resolve的值就是Promise.resolve的参数。
+
+#### 参数是Promise实例
+如果参数是Promise实例，那么Promise.resolve将不做任何修改、原封不动地返回这个实例。
+
+#### 参数是一个带then方法的对象
+thenable对象指的是具有then方法的对象，比如下面这个对象。
+
+``` javascript
+let thenable = {
+  then: function(resolve, reject) {
+    resolve(42);
+  }
+};
+```
+
+Promise.resolve方法会将这个对象转为Promise对象，然后就立即执行thenable对象的then方法。
+
+#### 没有then方法的对象或根本不是对象
+如果参数是一个原始值，或者是一个不具有then方法的对象，则Promise.resolve方法返回一个新的Promise对象，状态为Resolved。
+
+``` javascript
+var p = Promise.resolve('Hello');
+
+p.then(function (s){
+  console.log(s)
+});
+// Hello
+```
+
+上面代码生成一个新的Promise对象的实例p。由于字符串Hello不属于异步操作（判断方法是它不是具有then方法的对象），返回Promise实例的状态从一生成就是Resolved，所以回调函数会立即执行。Promise.resolve方法的参数，会同时传给回调函数。
+
+#### 不带参数
+Promise.resolve方法允许调用时不带参数，直接返回一个Resolved状态的Promise对象。
+
+所以，如果希望得到一个Promise对象，比较方便的方法就是直接调用Promise.resolve方法。
+
+#### 重点注意
+
+**立即resolve的Promise对象，是在本轮“事件循环”（event loop）的结束时，而不是在下一轮“事件循环”的开始时。**
+
+``` javascript
+setTimeout(function () {
+  console.log('three');
+}, 0);
+
+Promise.resolve().then(function () {
+  console.log('two');
+});
+
+console.log('one');
+
+// one
+// two
+// three
+```
+
+上面代码中，setTimeout(fn, 0)在下一轮“事件循环”开始时执行，Promise.resolve()在本轮“事件循环”结束时执行，console.log(’one‘)则是立即执行，因此最先输出。
