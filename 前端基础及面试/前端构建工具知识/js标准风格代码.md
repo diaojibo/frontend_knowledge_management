@@ -9,4 +9,6 @@ npm install standard -g
 
 就可以安装整个standard包了，命令行下执行standard，就可以检测出代码风格的错误。
 
+**运行 standard --fix 可以自动的解决多数问题**
+
 <a>http://hongfanqie.org/standardjs/index.html</a>

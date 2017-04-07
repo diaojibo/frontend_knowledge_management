@@ -36,3 +36,7 @@ co模块约定，yield命令后面只能是 Thunk 函数或 Promise 对象，而
 async函数的返回值是 Promise 对象，这比 Generator 函数的返回值是 Iterator 对象方便多了。你可以用then方法指定下一步的操作。
 
 进一步说，async函数完全可以看作多个异步操作，包装成的一个 Promise 对象，而await命令就是内部then命令的语法糖。
+
+
+### await
+注意await表达式的返回值，就是await后面promise对象的执行成功后的resolve值，这在Thunk函数那一节笔记中的流程控制(就是async的原理)有说到，每次都要讲异步任务获得的新数据(resolve出来的值)传递到gen.next(data)当中。

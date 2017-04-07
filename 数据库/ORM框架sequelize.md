@@ -37,3 +37,25 @@ var sequelize = new Sequelize('database', 'username', 'password', {
 var sequelize = new Sequelize('postgres://user:pass@example.com:5432/dbname');
 ```
 
+### 创建模型
+用define语句可以创建模型，在model文件夹下可以创建一个对应对象的model文件，然后export出去供其他人使用。
+
+如图范例
+
+``` javascript
+const Sequelize = require('sequelize')
+  , config = require('../config/db_config')
+const sequelize = new Sequelize('bgm_db', null, null, config)
+const subscriptionModel = {
+  sub_id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true
+  },
+  latest_episode_id: {
+    type: Sequelize.INTEGER
+  }
+}
+
+const Subscription = sequelize.define('subscription',subscriptionModel)
+module.exports = Subscription
+```

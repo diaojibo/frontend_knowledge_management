@@ -183,3 +183,4 @@ run(gen);
 上面代码的 run 函数，就是一个 Generator 函数的自动执行器。内部的 next 函数就是 Thunk 的回调函数。 next 函数先将指针移到 Generator 函数的下一步（gen.next 方法），然后判断 Generator 函数是否结束（result.done 属性），如果没结束，就将 next 函数再传入 Thunk 函数（result.value 属性），否则就直接退出。
 有了这个执行器，执行 Generator 函数方便多了。不管有多少个异步操作，直接传入 run 函数即可。**当然，前提是每一个异步操作，都要是 Thunk 函数，也就是说，跟在 yield 命令后面的必须是 Thunk 函数。**
 
+而且通过上图，result=gen.next(data)不难看出，每次promise函数执行得到的resolve值，都会再次传递会gen函数中。**简而言之便是，yield和await表达式的返回值，都是后面所跟promise对象完成后的resolve值。**
