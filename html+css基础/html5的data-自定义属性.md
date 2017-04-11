@@ -30,7 +30,8 @@ var test = document.getElementById('test');
 
 js获取
 ``` javascript
-getElementByID("test).dataset.birthDate = .....;
+getElementByID("test").dataset.birthDate = .....;
+
 ```
 
 

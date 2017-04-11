@@ -54,4 +54,4 @@ mongoose构建在mongodb之上，提供了**Schema、Model和Document**对象，
 我们可以用Schema对象定义文档的结构（类似表结构），可以定义字段和类型、唯一性、索引和验证。Model对象表示集合中的所有文档。Document对象作为集合中的单个文档的表示。
 
 
-
+注意mongodb不需要像关系型数据库一样设置主键，它自动会给每一个文档生成一个objectid的。
