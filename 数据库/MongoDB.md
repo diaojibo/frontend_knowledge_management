@@ -44,6 +44,11 @@ C:\"Program Files"\MongoDB\Server\3.4\bin\mongod.exe --dbpath=E:\proj\mongo_db
 
 ![](image/mongodb1.png)
 
+### shell交互
+
+注意，bin目录下的mongo.exe可以进行shell交互
+
+
 ### mongoose管理数据库
 Node.js有针对MongoDB的数据库驱动：mongodb。你可以使用“npm install mongodb”来安装。
 
