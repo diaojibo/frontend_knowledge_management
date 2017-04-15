@@ -56,6 +56,7 @@ person.save(function (err, fluffy) {
   if (err) return console.error(err);
 });
 ```
+注意model保存到database中的话，collection名(即是表名) 会自动转换成为复数。比如user，用mongoose保存之后存到数据库里会是users
 
 #### 查询
 model对象自带一些方法用于查询。
