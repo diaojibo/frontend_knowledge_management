@@ -20,6 +20,17 @@ app.listen(3000);
 
 当然最新的koa2已经支持直接添加es7的asy await语法糖
 
+``` javascript
+app.use(async (ctx, next) => {
+  const start = new Date();
+  await next();
+  const ms = new Date() - start;
+  console.log(`${ctx.method} ${ctx.url} - ${ms}ms`);
+});
+```
+以上方法更为推荐其实，接受了asy函数，函数有两个参数，一个是context一个是next。
+
+
 ### middleware
 Koa的中间件很像Express的中间件，也是对HTTP请求进行处理的函数，但是必须是一个Generator函数(**koa2已经可以用ES7的asy函数**)。而且，Koa的中间件是一个级联式（Cascading）的结构，也就是说，属于是层层调用，第一个中间件调用第二个中间件，第二个调用第三个，以此类推。上游的中间件必须等到下游的中间件返回结果，才会继续执行，这点很像递归。
 
