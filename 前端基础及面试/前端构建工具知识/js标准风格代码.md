@@ -11,4 +11,4 @@ npm install standard -g
 
 **运行 standard --fix 可以自动的解决多数问题**
 
-<a>http://hongfanqie.org/standardjs/index.html</a>
+<a>https://github.com/feross/standard</a>
