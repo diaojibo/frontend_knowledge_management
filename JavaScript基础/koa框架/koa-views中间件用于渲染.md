@@ -19,6 +19,9 @@ app.use(async function (ctx) {
 
 我们这里use了views，views接收一个地址，和一个设置参数。好比这个设置对象(opts){ map: {html: 'nunjucks' }}，这个设置的意思是,s所有html结尾的文件，都会用nunjucks这个渲染引擎去渲染。
 
+注意代码中的__dirname也必须要添加，是一个代表当前环境的变量
+
+
 上面代码我们还看到，第二次use了一个中间件，调用了上下文对象ctx.render方法来渲染一个网页。
 
 这里我们要注意两个事情了
